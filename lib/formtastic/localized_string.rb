@@ -2,7 +2,13 @@ module Formtastic
   module LocalizedString
 
     def model_name
-      @object.present? ? @object.class.name : @object_name.to_s.classify
+      if @object.class.respond_to?(:model_name)
+        @object.class.model_name.i18n_key
+      elsif @object.present?
+        @object.class.name
+      else
+        @object_name.to_s.classify
+      end
     end
 
     protected
